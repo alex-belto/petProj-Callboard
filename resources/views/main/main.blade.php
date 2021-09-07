@@ -7,7 +7,7 @@
     @section('menu')
         <ul>
             @foreach($categories as $category)
-               <li><a href="/category/{{$category -> id}}">{{$category -> name}}</a></li>
+               <li><a href="/public/category/{{$category -> id}}">{{$category -> name}}</a></li>
             @endforeach
         </ul>
     @endsection

@@ -18,6 +18,7 @@ class CreatePostsTable extends Migration
             $table -> text('text');
             $table -> integer('status');
             $table -> integer('subcategory_id');
+            $table -> integer('user_id');
             $table -> timestamps();
         });
     }

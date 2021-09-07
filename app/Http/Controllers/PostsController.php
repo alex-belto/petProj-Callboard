@@ -4,26 +4,57 @@ namespace App\Http\Controllers;
 
 use App\Models\Post;
 use App\Models\Category;
+use App\Models\Subcategory;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class PostsController extends Controller
 {
-    public function showCategory()
+    public function showCategory($id)
     {
-
+        $categoryName = Category::find($id) -> name;
+        $subcategories = Category::find($id) -> sub() -> get();
+        $posts = Category::find($id) -> posts() -> get();
+        //dd($posts);
+        return view('main.category', ['subcategories' => $subcategories, 'posts' => $posts, 'title' => $categoryName]);
     }
 
-    public function showSubcategory()
+    public function showSubcategory($id)
     {
+        $subcategoryName = Subcategory::find($id)-> name;
+        $posts = Post::where('subcategory_id', $id) -> simplePaginate(3);
 
+
+        //dd($posts);
+        return view('main.subcategory', ['title' => $subcategoryName, 'posts' => $posts]);
     }
 
     public function showPosts()
     {
-        $posts = Post::simplePaginate(1);
+        $posts = Post::simplePaginate(3);
         $categories = Category::all();
 
         //dd($result);
-        return view('main.posts', ['posts'=>$posts, 'categories'=>$categories]);
+        return view('main.main', ['posts'=>$posts, 'categories'=>$categories]);
+    }
+
+    public function getPost(Request $request, $id)
+    {
+        if($request -> has('submit')){
+
+            $request -> validate([
+                'text'=>'required|MAX:256',
+            ]);
+
+            $post = new Post;
+            $post -> text = $request -> input('text');
+            $post -> user_id =  Auth::id();
+            $post -> subcategory_id = $id;
+
+            $post -> save();
+
+            return redirect("/subcategory/$id/");
+        }
     }
 
 }

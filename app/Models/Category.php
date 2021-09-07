@@ -9,9 +9,9 @@ class Category extends Model
 {
     use HasFactory;
 
-    public function sub(): \Illuminate\Database\Eloquent\Relations\BelongsToMany
+    public function sub(): \Illuminate\Database\Eloquent\Relations\hasMany
     {
-        return $this -> belongsToMany(Subcategory::class);
+        return $this -> hasMany(Subcategory::class);
     }
     public function posts(): \Illuminate\Database\Eloquent\Relations\HasManyThrough
     {

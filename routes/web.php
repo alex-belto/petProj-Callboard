@@ -28,3 +28,6 @@ require __DIR__.'/auth.php';
 use App\Http\Controllers\PostsController;
 
     Route::get('/', [PostsController::class, 'showPosts']);
+    Route::get('/category/{id}', [PostsController::class, 'showCategory']);
+    Route::get('/subcategory/{id}/', [PostsController::class, 'showSubcategory']);
+    Route::post('/subcategory/{id}/', [PostsController::class, 'getPost']) -> middleware('auth');
