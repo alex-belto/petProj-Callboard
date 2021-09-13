@@ -6,7 +6,7 @@
     @endsection
 
     @section('menu')
-        <a href="/public/admin/users">Users</a>
+        <a href="/public/admin/users">Users >></a>
     @endsection
 
     @section('main')

@@ -34,9 +34,13 @@ use App\Http\Controllers\PostsController;
 
     //admin
 use App\Http\Controllers\AdminPostController;
+use App\Http\Controllers\AdminUserController;
     Route::group(['prefix'=>'admin', 'middleware'=>'auth'], function(){
 
         Route::get('/', [AdminPostController::class, 'show']); //show posts
         Route::match(['GET', 'POST'], '/post/{id}', [AdminPostController::class, 'edit']); //post edit
-
+        Route::get('/users/', [AdminUserController::class, 'show']); //show users
+        Route::match(['GET', 'POST'], '/user/{id}', [AdminUserController::class, 'edit']); //user profile edit
+        Route::get('/users/role_del/{role_id}/{user_id}/', [AdminUserController::class, 'delRole']); //delete
+        Route::match(['GET', 'POST'], '/users/role_add/{user_id}/', [AdminUserController::class, 'addRole']);
     });

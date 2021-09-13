@@ -2,11 +2,11 @@
 
 
 @section('title')
-    Posts
+    Post
 @endsection
 
 @section('menu')
-    <a href="/public/admin/">Posts</a>
+    <a href="/public/admin/"><< Posts</a>
 @endsection
 
 @section('main')
