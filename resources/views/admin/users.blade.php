@@ -16,6 +16,7 @@
             @foreach($users as $user)
                 <tr>
                     <td>{{$user -> name}}</td>
+                    <td>{{$user -> status}}</td>
                     <td><a href="/public/admin/user/{{$user->id}}">Изменить</a></td>
                 </tr>
                 @foreach($user->roles as $role)

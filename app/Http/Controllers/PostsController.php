@@ -31,7 +31,7 @@ class PostsController extends Controller
 
     public function showPosts()
     {
-        $posts = Post::simplePaginate(3);
+        $posts = Post::where('status', '1') -> simplePaginate(3);
         $categories = Category::all();
 
         //dd($result);

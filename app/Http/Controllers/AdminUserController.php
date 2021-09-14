@@ -12,20 +12,19 @@ class AdminUserController extends Controller
     {
         $users = User::simplePaginate(3);
 
-
         return view('admin.users', ['users'=>$users]);
     }
 
     public function edit(Request $request, $id) //изменить данные рользователя
     {
-        $user = User::find($id);
+        $user = User::find($id); //user
 
 
-
-        if($request -> has('submit'))
+        if($request -> has('submit')) //user changes
         {
             $user -> name = $request -> input('name');
             $user -> email = $request -> input('email');
+            $user -> status = $request -> input('status');
 
             $user -> save();
 
