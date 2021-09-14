@@ -27,10 +27,12 @@
 @endsection
 
 @section('form')
-    <br><p>Вы можете оставить свое обьявление тут</p>
+    @if($auth)
+    <br><p>Вы можете оставить свое обьявление тут:</p>
     <form action="" method="POST">
         @csrf
-        <textarea name="text" placeholder="Text">{{ old('text') }}</textarea>
+        <textarea rows="7" cols="45" name="text" placeholder="Text">{{ old('text') }}</textarea><br><br>
         <input type="submit" name="submit" value="Отправить">
     </form>
+    @endif
 @endsection

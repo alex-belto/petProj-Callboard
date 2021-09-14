@@ -30,12 +30,12 @@ use App\Http\Controllers\PostsController;
     Route::get('/', [PostsController::class, 'showPosts']);
     Route::get('/category/{id}', [PostsController::class, 'showCategory']);
     Route::get('/subcategory/{id}/', [PostsController::class, 'showSubcategory']);
-    Route::post('/subcategory/{id}/', [PostsController::class, 'getPost']) -> middleware('auth');
+    Route::post('/subcategory/{id}/', [PostsController::class, 'addPost']) -> middleware('auth');
 
     //admin
 use App\Http\Controllers\AdminPostController;
 use App\Http\Controllers\AdminUserController;
-    Route::group(['prefix'=>'admin', 'middleware'=>'auth'], function(){
+    Route::group(['prefix'=>'admin', 'middleware'=>['auth', 'admin']], function(){
 
         Route::get('/', [AdminPostController::class, 'show']); //show posts
         Route::match(['GET', 'POST'], '/post/{id}', [AdminPostController::class, 'edit']); //post edit

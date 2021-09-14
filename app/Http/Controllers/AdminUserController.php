@@ -5,6 +5,8 @@ use App\Models\Role;
 use App\Models\Role_User;
 use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class AdminUserController extends Controller
 {
@@ -17,11 +19,15 @@ class AdminUserController extends Controller
 
     public function edit(Request $request, $id) //изменить данные рользователя
     {
-        $user = User::find($id); //user
-
+        $user = User::find($id); //updated user
+        $authUser = Auth::user(); //auth user
 
         if($request -> has('submit')) //user changes
         {
+            if(Gate::denies('update', [$user, $authUser]))
+            {
+                return redirect('/admin/users/') -> with(['message'=>'У вас нет прав!']);
+            }
             $user -> name = $request -> input('name');
             $user -> email = $request -> input('email');
             $user -> status = $request -> input('status');
@@ -37,6 +43,12 @@ class AdminUserController extends Controller
 
     public function delRole(Request $request, $role_id, $user_id) //удалить роль
     {
+        $authUser = Auth::user();
+
+        if(Gate::denies('updateJustAdmin', $authUser)){
+            return redirect('/admin/users/') -> with(['message' => 'У вас нет прав!']);
+        }
+
         Role_User::where('role_id', $role_id) -> where('user_id', $user_id) -> delete();
         $request -> session() -> flash('message', 'Роль пользователя удалена!');
         return redirect('/admin/users/');
@@ -45,11 +57,16 @@ class AdminUserController extends Controller
     public function addRole(Request $request, $user_id) //добавить роль
     {
         $user = User::find($user_id);
+        $authUser = Auth::user();
         $roles = Role::all();
-        //dump($roles);
+
+        if(Gate::denies('updateJustAdmin', $authUser))
+        {
+            return redirect('/admin/users/') -> with(['message' => 'У вас нет прав!']);
+        }
+
         if($request -> has('role'))
         {
-
             $role_id =  $request -> input('role'); //role_id
 
             $roleUser = new Role_User;

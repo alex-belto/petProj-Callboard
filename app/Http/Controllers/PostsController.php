@@ -7,6 +7,7 @@ use App\Models\Category;
 use App\Models\Subcategory;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Gate;
 
 class PostsController extends Controller
 {
@@ -21,12 +22,18 @@ class PostsController extends Controller
 
     public function showSubcategory($id)
     {
+        if(Auth::user()){
+            $auth = true;
+        }else{
+            $auth = false;
+        }
+
         $subcategoryName = Subcategory::find($id)-> name;
         $posts = Post::where('subcategory_id', $id) -> simplePaginate(3);
 
 
         //dd($posts);
-        return view('main.subcategory', ['title' => $subcategoryName, 'posts' => $posts]);
+        return view('main.subcategory', ['title' => $subcategoryName, 'posts' => $posts, 'auth'=>$auth]);
     }
 
     public function showPosts()
@@ -38,8 +45,9 @@ class PostsController extends Controller
         return view('main.main', ['posts'=>$posts, 'categories'=>$categories]);
     }
 
-    public function getPost(Request $request, $id)
+    public function addPost(Request $request, $id)
     {
+
         if($request -> has('submit')){
 
             $request -> validate([
