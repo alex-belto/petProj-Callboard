@@ -50,6 +50,7 @@ class AdminUserController extends Controller
         //dump($roles);
         if($request -> has('role'))
         {
+
             $role_id =  $request -> input('role'); //role_id
 
             $roleUser = new Role_User;
@@ -57,6 +58,9 @@ class AdminUserController extends Controller
             $roleUser -> role_id = $role_id;
 
             $roleUser -> save();
+
+
+
             $request -> session() -> flash('message', 'Добавлена новая роль!');
             return redirect('/admin/users/');
         }
