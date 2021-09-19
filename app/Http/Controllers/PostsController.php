@@ -11,11 +11,13 @@ use Illuminate\Support\Facades\Gate;
 
 class PostsController extends Controller
 {
+    use PostsOptionsTrait;
+
     public function showCategory($id)
     {
         $categoryName = Category::find($id) -> name;
         $subcategories = Category::find($id) -> sub() -> get();
-        $posts = Category::find($id) -> posts() -> get();
+        $posts = Category::find($id) -> posts() ->where('status', '1') -> get();
         //dd($posts);
         return view('main.category', ['subcategories' => $subcategories, 'posts' => $posts, 'title' => $categoryName]);
     }
@@ -29,10 +31,10 @@ class PostsController extends Controller
         }
 
         $subcategoryName = Subcategory::find($id)-> name;
-        $posts = Post::where('subcategory_id', $id) -> simplePaginate(3);
+        $posts = Post::where('subcategory_id', $id)-> where('status', '1') -> simplePaginate(3);
 
 
-        //dd($posts);
+
         return view('main.subcategory', ['title' => $subcategoryName, 'posts' => $posts, 'auth'=>$auth]);
     }
 
@@ -44,6 +46,7 @@ class PostsController extends Controller
         //dd($result);
         return view('main.main', ['posts'=>$posts, 'categories'=>$categories]);
     }
+
 
     public function addPost(Request $request, $id)
     {
@@ -61,8 +64,11 @@ class PostsController extends Controller
 
             $post -> save();
 
+            $request -> session() -> flash('message', 'Запись успешно добавлена и отобразится после проверки модератором!');
             return redirect("/subcategory/$id/");
         }
     }
+
+
 
 }

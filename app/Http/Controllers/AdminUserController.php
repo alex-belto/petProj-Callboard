@@ -10,6 +10,8 @@ use Illuminate\Support\Facades\Gate;
 
 class AdminUserController extends Controller
 {
+
+
     public function show() //вывести всех пользователей
     {
         $users = User::simplePaginate(3);
